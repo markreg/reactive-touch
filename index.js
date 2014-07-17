@@ -38,7 +38,7 @@ function addBindings(instance, name, suffixes) {
         if (!fn) throw new Error('method .' + method + '() missing')
         fn.call(view, ev, reactive)
       })
-    }
+    })
   })
 }
 

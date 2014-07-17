@@ -1,6 +1,6 @@
 # reactive-touch (work in progress)
 
-> Touch bindings for [reactive-component](https://github.com/component/reactive) with Hammer. Use on-swipe, on-tap, on-rotate and many more in your reactive views.
+> Touch bindings for [reactive-component](https://github.com/component/reactive) with [Hammer](https://hammerjs.github.io/). Use on-swipe, on-tap, on-rotate and many more in your reactive views.
 
 * [Example](#example)
 * [Plugin usage](#plugin-usage)
@@ -76,6 +76,20 @@ var handlers = {
 With npm via [browserify](http://browserify.org/):
 
     npm i reactive-touch
+
+## Testing
+
+**Manually**:
+
+    npm i -g browserify
+    browserify test/index.js > test/bundle.js
+
+Then open test/index.html in a browser. In Chrome, tick "Emulate touch screen" in devtools.
+
+**With testling (local)**:
+
+    npm i -g browserify testling
+    npm test
 
 ## License
 

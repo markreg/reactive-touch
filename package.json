@@ -1,10 +1,10 @@
 {
   "name": "reactive-touch",
   "version": "0.0.0",
-  "description": "Touch bindings for reactive-component using Hammer",
+  "description": "Touch bindings for reactive-component with Hammer",
   "main": "index.js",
   "scripts": {
-    "test": "tape test/*.js"
+    "test": "browserify test/index.js | testling"
   },
   "repository": {
     "type": "git",
@@ -23,5 +23,22 @@
   "homepage": "https://github.com/vweevers/reactive-touch",
   "dependencies": {
     "hammerjs": "^2.0.1"
+  },
+  "devDependencies": {
+    "reactive": "^1.1.1",
+    "tape": "^2.13.3"
+  },
+  "testling": {
+    "files": "test/index.js",
+    "browsers": [
+      "ie/9..latest",
+      "chrome/22..latest",
+      "firefox/16..latest",
+      "safari/latest",
+      "opera/11.0..latest",
+      "iphone/6",
+      "ipad/6",
+      "android-browser/latest"
+    ]
   }
 }
