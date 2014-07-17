@@ -1,0 +1,27 @@
+{
+  "name": "reactive-touch",
+  "version": "0.0.0",
+  "description": "Touch bindings for reactive-component using Hammer",
+  "main": "index.js",
+  "scripts": {
+    "test": "tape test/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vweevers/reactive-touch"
+  },
+  "keywords": [
+    "reactive",
+    "touch",
+    "hammer"
+  ],
+  "author": "Vincent Weevers",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vweevers/reactive-touch/issues"
+  },
+  "homepage": "https://github.com/vweevers/reactive-touch",
+  "dependencies": {
+    "hammerjs": "^2.0.1"
+  }
+}
