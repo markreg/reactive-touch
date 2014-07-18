@@ -77,19 +77,12 @@ With npm via [browserify](http://browserify.org/):
 
     npm i reactive-touch
 
-## Testing
-
-**Manually**:
+## Manual testing
 
     npm i -g browserify
-    browserify test/index.js > test/bundle.js
+    npm run test-bundle
 
 Then open test/index.html in a browser. In Chrome, tick "Emulate touch screen" in devtools.
-
-**With testling (local)**:
-
-    npm i -g browserify testling
-    npm test
 
 ## License
 

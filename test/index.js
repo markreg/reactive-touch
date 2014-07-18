@@ -6,37 +6,43 @@ var reactive = require('reactive')
 // Use hammer's Simulator
 require('hammerjs/tests/shared/simulator.js')
 
-// This does not work on Chrome. Must 
-// enable "Emulate touch screen".
-Simulator.setType('touch');
-Simulator.events.touch.fakeSupport();
+Simulator.setType('touch')
+Simulator.events.touch.fakeSupport()
 
 test('on swipe', function (t) {
-  t.plan(1)
+  t.plan(3)
 
-  var template = '<div on-swipe="swipe" on-swipeleft="left">Swipe</div>'
-  var view  = reactive(template, {}, {
+  var template = 
+    '<div on-swipe="swipe" on-swipeleft="left">' +
+    'Swipe</div>'
+
+  var view  = reactive(template, {a: 10}, {
     delegate: {
       swipe: function(ev, ctx) {
         t.ok(true, 'handler called')
+        t.equal(ctx.model.a, 10, 'has context')
       },
-      // TODO: this only fires when swiped manually
-      // left: function(ev, ctx) {
-      //   console.log('swipeleft', ev, ctx)
-      //   t.equal(ev.direction, Hammer.DIRECTION_LEFT) // true
-      // }
+      left: function(ev, ctx) {
+        t.equal(ev.direction, Hammer.DIRECTION_LEFT)
+      }
     }
   })
 
   view.use(touch)
 
-  document.body.appendChild(view.el)
-  view.el.style.height = '100vh'
+  var el = view.el
+  document.body.appendChild(el)
+  el.style.height = '200px'
 
   setTimeout(function(){
-    Simulator.gestures.swipe(view.el, { 
-      duration: 200, deltaX: 0, deltaY: -600,
-      pos: [100, 900], easing: 'linear'
+
+    Simulator.gestures.swipe(el, { 
+      duration: 150, deltaX: -140, deltaY: 5,
+      pos: [150, 10],
+      easing: 'cubic'
+    }, function done() {
+      // ..
     })
-  }, 100)
+
+  }, 900)
 })

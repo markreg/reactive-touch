@@ -4,7 +4,7 @@
   "description": "Touch bindings for reactive-component with Hammer",
   "main": "index.js",
   "scripts": {
-    "test": "browserify test/index.js | testling"
+    "test-bundle": "browserify test/index.js > test/bundle.js"
   },
   "repository": {
     "type": "git",
@@ -31,11 +31,6 @@
   "testling": {
     "files": "test/index.js",
     "browsers": [
-      "ie/9..latest",
-      "chrome/22..latest",
-      "firefox/16..latest",
-      "safari/latest",
-      "opera/11.0..latest",
       "iphone/6",
       "ipad/6",
       "android-browser/latest"

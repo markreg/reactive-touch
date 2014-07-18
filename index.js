@@ -1,14 +1,19 @@
 var Hammer = require('hammerjs')
   , defaults = { enable: true }
-  , recognizers = list()
 
 module.exports = function(instance) {
-  for(var name in recognizers) {
-    addBindings(instance, name, recognizers[name])
-  }
+  var directions = ['left', 'right', 'up', 'down']
+  var events = ['start', 'move', 'end', 'cancel']
+
+  bind( instance, 'Pan',    events.concat(directions) )
+  bind( instance, 'Pinch',  events.concat(['in', 'out']) )
+  bind( instance, 'Press',  [] )
+  bind( instance, 'Rotate', events )
+  bind( instance, 'Swipe',  directions )
+  bind( instance, 'Tap',    [] )
 }
 
-function addBindings(instance, name, suffixes) {
+function bind(instance, name, suffixes) {
   // tap, swipe, etc.
   var main = name.toLowerCase()
 
@@ -71,23 +76,8 @@ function createRecognizer(name, el, view, store) {
       store.setup = fn
     } else {
       store.setup = false
-      return
     }
   }
     
-  store.setup.call(view, el, recog)
-}
-
-function list() { 
-  var directions = ['left', 'right', 'up', 'down']
-  var events = ['start', 'move', 'end', 'cancel']
-
-  return {
-      Pan: events.concat(directions)
-    , Pinch: events.concat(['in', 'out'])
-    , Press: []
-    , Rotate: events
-    , Swipe: directions
-    , Tap: []
-  }
+  store.setup && store.setup.call(view, el, recog)
 }
