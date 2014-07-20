@@ -1,9 +1,12 @@
 # reactive-touch
 
-> Touch bindings for [reactive-component](https://github.com/component/reactive) with [Hammer](https://hammerjs.github.io/). Use on-swipe, on-tap, on-rotate and many more in your reactive views.
+> Touch bindings for [reactive](https://github.com/component/reactive) with [Hammer](https://hammerjs.github.io/). Use on-swipe, on-tap, on-rotate and many more in your reactive views.
 >
-> Jump to: [Usage](#usage) - [Install](#install) - [Test](#test) - [License](#license)
+> Jump to: [Example](#example) - [Usage](#usage) - [Install](#install) - [Test](#test) - [License](#license)
 
+#### Build status
+
+*See [Hammer browser support](https://hammerjs.github.io/browser-support.html) and [reactive](https://github.com/component/reactive) for actual browser support.*
 [![Build Status](https://saucelabs.com/browser-matrix/reactive-touch-sauce.svg)](https://travis-ci.org/vweevers/reactive-touch)
 
 ## Example
