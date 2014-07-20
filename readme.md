@@ -1,13 +1,10 @@
-# reactive-touch (work in progress)
+# reactive-touch
 
 > Touch bindings for [reactive-component](https://github.com/component/reactive) with [Hammer](https://hammerjs.github.io/). Use on-swipe, on-tap, on-rotate and many more in your reactive views.
+>
+> Jump to: [Usage](#usage) - [Install](#install) - [Test](#test) - [License](#license)
 
-* [Example](#example)
-* [Plugin usage](#plugin-usage)
-* [Reactive bindings](#reactive-bindings)
-* [Configuration](#configuration)
-* [Install](#install)
-* [License](#license)
+[![Build Status](https://saucelabs.com/browser-matrix/reactive-touch-sauce.svg)](https://travis-ci.org/vweevers/reactive-touch)
 
 ## Example
 
@@ -20,20 +17,20 @@ var reactive = require('reactive')
 var template = 
   '<div on-swipeleft="swipe">Touch this</div>'
 
-var handlers = {
-  swipe: function(ev, ctx) {
-    console.log(ev.gesture.direction === 'left') // true
-  }
-}
-
 var view  = reactive(template, {}, {
-  delegate: handlers
+  delegate: {
+    swipe: function(ev, ctx) {
+      console.log('you swiped left')
+    }
+  }
 })
 
 view.use(touch)
 ```
 
-## Plugin usage
+## Usage
+
+To use this plugin in your view:
 
 ```js
 var touch = require('reactive-touch')
@@ -42,9 +39,7 @@ var view  = reactive(template, model)
 view.use(touch)
 ```
 
-## Reactive bindings
-
-After including the plugin, you can use the following bindings in your view. Follow the links for a full list of events. Always prefix the Hammer event name with "on-".
+The view can then react to any Hammer event. Prefix the event with "on-" to get the binding name. Follow the links below for a full list of events.
 
 - [on-swipe](https://hammerjs.github.io/recognizer-swipe.html), on-swipeleft, etc
 - [on-pan](https://hammerjs.github.io/recognizer-pan.html), ..
@@ -53,7 +48,7 @@ After including the plugin, you can use the following bindings in your view. Fol
 - [on-rotate](https://hammerjs.github.io/recognizer-rotate.html), ..
 - [on-tap](https://hammerjs.github.io/recognizer-tap.html)
 
-## Configuration
+### Configuration
 
 Each element with one or more touch bindings, gets his own [set of recognizers](https://hammerjs.github.io/getting-started.html#more-control), encapsulated in a manager. These recognizers can be configured by adding a `touch-setup` attribute with a method name. The method will be called once for each element+recognizer pair. *Note: this API might change, once reactive supports method arguments or something similar.*
 
@@ -63,7 +58,7 @@ var template =
 
 var handlers = {
   swipe: ..
-  configure: function(element, Swipe) {
+  configure: function(element, Swipe, ctx) {
     // Set the minimal distance required 
     // before recognizing a swipe.
     Swipe.set({distance: 50})
@@ -73,19 +68,19 @@ var handlers = {
 
 ## Install
 
-With npm via [browserify](http://browserify.org/):
-
     npm i reactive-touch
 
-## Manual testing
+Then use [browserify](http://browserify.org/) to bundle for the browser.
 
-    npm i -g browserify
-    npm run test-bundle
+## Test
 
-Then open test/index.html in a browser. In Chrome, tick "Emulate touch screen" in devtools.
+    npm i zuul -g
+    npm test
+
+Or local:
+
+    npm run test-local
 
 ## License
 
 [MIT](http://opensource.org/licenses/MIT) © [Vincent Weevers](http://vincentweevers.nl)
-
-Hammer: [MIT](http://opensource.org/licenses/MIT) © 2011-2014 Jorik Tangelder (Eight Media)

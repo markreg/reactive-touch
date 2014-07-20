@@ -1,48 +1,78 @@
-var reactive = require('reactive')
-  , touch = require('../')
+var touch = require('../')
   , test = require('tape')
   , Hammer = require('hammerjs')
+  , createView = require('./utils').createView
 
-// Use hammer's Simulator
-require('hammerjs/tests/shared/simulator.js')
+test('reactive-touch', function(t){
+  t.equal(typeof touch, 'function', 'is a function')
+  t.throws(touch, Error, 'requires a reactive instance')
+  t.end()
+})
 
-Simulator.setType('touch')
-Simulator.events.touch.fakeSupport()
+test('bind', function(t){
+  var view = createView('<div on-swipe="foo"></div>')
+  var meta = view.el.touchBinding || {}
+  
+  t.ok(meta.mc instanceof Hammer.Manager, 'has a manager')
+  t.ok(meta.Swipe instanceof Hammer.Recognizer, 'has a recognizer')
+  t.ok(meta.Tap == null, 'no unnecessary recognizer')
+  t.end()
+})
 
-test('on swipe', function (t) {
-  t.plan(3)
+test('handlers', function(t){
+  t.plan(4)
 
-  var template = 
-    '<div on-swipe="swipe" on-swipeleft="left">' +
-    'Swipe</div>'
-
-  var view  = reactive(template, {a: 10}, {
-    delegate: {
-      swipe: function(ev, ctx) {
-        t.ok(true, 'handler called')
-        t.equal(ctx.model.a, 10, 'has context')
-      },
-      left: function(ev, ctx) {
-        t.equal(ev.direction, Hammer.DIRECTION_LEFT)
-      }
+  var view = createView('<div on-tap="foo" on-swipe="bar"></div>', {
+    foo: function(ev, ctx) {
+      t.equal(ev.a, 10, 'invoked')
+      t.equal(this, ctx.view, 'fn context is view')
     }
   })
 
-  view.use(touch)
+  var mc = view.el.touchBinding.mc
+  mc.emit('tap', {a: 10})
 
-  var el = view.el
-  document.body.appendChild(el)
-  el.style.height = '200px'
+  function swipe()  { 
+    mc.emit('swipe', {})
+  }
+  
+  function create() { 
+    createView('<div on-tap=""></div>')
+  }
 
-  setTimeout(function(){
+  t.throws(swipe,  Error, 'asserts handler exists')
+  t.throws(create, Error, 'asserts method name is given')
+})
 
-    Simulator.gestures.swipe(el, { 
-      duration: 150, deltaX: -140, deltaY: 5,
-      pos: [150, 10],
-      easing: 'cubic'
-    }, function done() {
-      // ..
-    })
+test('setup', function(t){
+  var tpl = '<div id="a" on-swipe="swipe" on-swipeleft="left" touch-setup="setup"></div>'
 
-  }, 900)
+  t.plan(3) // setup should be called once
+  createView(tpl, {
+    swipe: function() {},
+    left: function() {},
+    setup: function(el, recognizer, ctx) {
+      t.equal(el.id, 'a')
+      t.ok(recognizer instanceof Hammer.Swipe)
+      t.equal(this, ctx.view, 'fn context is view')
+    }
+  })
+})
+
+test('destroy', function(t){
+  var dontset
+  var view = createView('<div on-tap="dontcall"></div>', {
+    dontcall: function() {
+      dontset = 100
+    }
+  })
+
+  var mc = view.el.touchBinding.mc
+  view.destroy()
+
+  t.ok(view.el.touchBinding == null, 'removes metadata')
+
+  mc.emit('tap', {})
+  t.ok(dontset == null, 'removes listeners')
+  t.end()
 })

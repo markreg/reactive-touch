@@ -2,6 +2,9 @@ var Hammer = require('hammerjs')
   , defaults = { enable: true }
 
 module.exports = function(instance) {
+  if (instance == null || typeof instance.bind !== 'function')
+    throw new Error('Requires Reactive instance')
+
   var directions = ['left', 'right', 'up', 'down']
   var events = ['start', 'move', 'end', 'cancel']
 
@@ -26,6 +29,8 @@ function bind(instance, name, suffixes) {
       , binding = 'on-' + event
 
     instance.bind(binding, function(el, method) {
+      if (!method) throw new Error('method name missing')
+
       var reactive = this.reactive
         , view     = reactive.view
 
@@ -35,7 +40,7 @@ function bind(instance, name, suffixes) {
       if (store.mc == null)
         store.mc = createManager(el, reactive)
       if (store[name] == null)
-        createRecognizer(name, el, view, store)
+        createRecognizer(name, el, reactive, store)
 
       store.mc.on(event, function(ev){
         // ev.preventDefault?
@@ -53,16 +58,17 @@ function createManager(el, reactive) {
 
   reactive.on('destroyed', function() {
     mc.destroy()
-    delete el.store
+    delete el.touchBinding
   })
 
   return mc
 }
 
 // Create Hammer recognizer
-function createRecognizer(name, el, view, store) {
+function createRecognizer(name, el, reactive, store) {
   var recog = new Hammer[name](defaults)
-  
+  var view = reactive.view
+
   store[name] = recog
   store.mc.add(recog)
 
@@ -79,5 +85,5 @@ function createRecognizer(name, el, view, store) {
     }
   }
     
-  store.setup && store.setup.call(view, el, recog)
+  store.setup && store.setup.call(view, el, recog, reactive)
 }

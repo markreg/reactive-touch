@@ -4,7 +4,8 @@
   "description": "Touch bindings for reactive-component with Hammer",
   "main": "index.js",
   "scripts": {
-    "test-bundle": "browserify test/index.js > test/bundle.js"
+    "test-local": "zuul --local 8080 -- test/index.js",
+    "test": "zuul -- test/index.js"
   },
   "repository": {
     "type": "git",
@@ -26,14 +27,7 @@
   },
   "devDependencies": {
     "reactive": "^1.1.1",
-    "tape": "^2.13.3"
-  },
-  "testling": {
-    "files": "test/index.js",
-    "browsers": [
-      "iphone/6",
-      "ipad/6",
-      "android-browser/latest"
-    ]
+    "tape": "^2.13.3",
+    "zuul": "^1.9.0"
   }
 }

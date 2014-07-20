@@ -1,0 +1,10 @@
+language: node_js
+node_js:
+- '0.10'
+branches:
+  only:
+  - master
+env:
+  global:
+  - SAUCE_USERNAME=reactive-touch-sauce
+  - secure: Vz+CGAcTtD9qrVUnLK7ATJKBC7LUh/NWN/ix0mnNtVMH+DY5stLIAHVGMU3EAiSarQQP6XOcIWEGaiK14o77sWKq75irsvYAiNX5Ixl5BYJM4JLBvOfDnqTpR8U602YF7F5Q1+wmzq5PUF+LYcnJqzz9Qw9NtNxTWf+GznRGkGM=
