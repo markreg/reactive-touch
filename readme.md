@@ -31,18 +31,22 @@ This example shows off per-view and per-element recognizer options, reactive ena
 
 [ TODO: requirebin link ]
 
+*template.html*
 ```html
-<div on-swipeleft="swipe" swipe-distance="50" swipe-enable="{active}">
-  Swipe left
-</div>
-<div on-tap on-mycustomtap>
-  Tap or double tap
+<div on-swipeleft swipe-distance="50" swipe-enable="{active}">
+  <p>{active ? 'Swipe left' : 'Waiting..'}</p>
+  <button data-hidden="active" on-tap="activate">Activate swipe</button>
+  <button on-tap="tapBtn" on-mycustomtap="doubletapBtn">
+    {tapped || 'Tap or doubletap me'}
+  </button>
 </div>
 ```
 
+*example.js*
 ```js
 var reactive = require('reactive')
   , touch = require('reactive-touch')
+  , template = require('template.html')
 
 var defaults = {
   swipe: { distance: 10 },
@@ -58,19 +62,20 @@ var model = { active: false }
 var view  = reactive(template, model, {
   bindings: touch(null, defaults),
   delegate: {
-    swipe: function(ev, ctx) {
+    activate: function(ev, ctx) {
+      ctx.set('active', true)
+    },
+    swipeleft: function(ev, ctx) {
       console.log(ev.distance > 50) // true
     },
-    tap: function(ev, ctx) {
-      console.log('single tap')
+    tapBtn: function(ev, ctx) {
+      ctx.set('tapped', 'single')
     },
-    mycustomtap: function(ev, ctx) {
-      console.log('double tap')
+    doubletapBtn: function(ev, ctx) {
+      ctx.set('tapped', 'double')
     }
   }
 })
-
-view.set('active', true)
 ```
 
 ## Usage
