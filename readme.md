@@ -62,7 +62,27 @@ Each element with one or more touch bindings, gets his own [set of recognizers](
 <div on-swipe swipe-velocity="0.65" swipe-direction="24"></div>
 <div on-tap tap-taps="2">double tap</div>
 <div on-tap tap-setup="specialTap"></div>
+<div on-pinch on-rotate pinch-with="rotate">TODO</div>
 <div on-press press-enable="{ someMethod }"></div>
+```
+
+### TODO: custom events
+
+```html
+<div on-tap on-doubletap></div>
+```
+
+```js
+touch(bindings, {
+  tap: {
+    requireFailure: 'doubletap'
+  },
+  doubletap: {
+    recognizer: 'Tap', // auto?
+    taps: 2,
+    recognizeWith: 'tap'
+  }
+})
 ```
 
 ### List of events and options
