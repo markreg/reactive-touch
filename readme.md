@@ -1,18 +1,42 @@
 # reactive-touch
 
-Configurable touch bindings for [reactive](https://github.com/component/reactive) with [Hammer](https://hammerjs.github.io/). Use on-swipe, on-tap, on-rotate and many more in your reactive views.
+Configurable touch bindings for [reactive](https://github.com/component/reactive) with [Hammer](https://hammerjs.github.io/). Use `on-swipe`, `on-tap`, `on-rotate` and many more in your reactive views. Also supports bindings for custom events, like `on-doubletap`.
 
-> Jump to: [Example](#example) - [Usage](#usage) - [Install](#install) - [Test](#test) - [License](#license)
+> Jump to: [Quickstart](#quickstart) - [Example](#example) - [Usage](#usage) - [Install](#install) - [Test](#test) - [License](#license)
 
 [![Build Status](https://saucelabs.com/browser-matrix/reactive-touch-sauce.svg)](https://travis-ci.org/vweevers/reactive-touch)
 
 See [Hammer browser support](https://hammerjs.github.io/browser-support.html) and [reactive](https://github.com/component/reactive) for actual browser support.
 
+## Quickstart
+
+```js
+var reactive = require('reactive')
+  , touch = require('reactive-touch')
+
+var tpl  = '<div on-swipeleft>Swipe left</div>'
+var view = reactive(tpl, null, {
+  bindings: touch(),
+  delegate: {
+    swipeleft: function(ev, ctx) {
+      console.log('you swiped left')
+    }
+  }
+})
+```
+
 ## Example
 
+This example shows off per-view and per-element recognizer options, reactive enabling of events, default handler names and a custom Tap recognizer.
+
+[ TODO: requirebin link ]
+
 ```html
-<div on-swipeleft="slide" swipe-distance="50" swipe-enable="{active}">
-Swipe here
+<div on-swipeleft="swipe" swipe-distance="50" swipe-enable="{active}">
+  Swipe left
+</div>
+<div on-tap on-mycustomtap>
+  Tap or double tap
 </div>
 ```
 
@@ -20,13 +44,28 @@ Swipe here
 var reactive = require('reactive')
   , touch = require('reactive-touch')
 
+var defaults = {
+  swipe: { distance: 10 },
+  tap:   { requireFailure: 'mycustomtap' },
+  mycustomtap: {
+    taps: 2,
+    recognizeWith: 'tap'
+  }
+}
+
 var model = { active: false }
+
 var view  = reactive(template, model, {
-  bindings: touch(),
+  bindings: touch(null, defaults),
   delegate: {
-    slide: function(ev, ctx) {
-      console.log('you swiped left')
+    swipe: function(ev, ctx) {
       console.log(ev.distance > 50) // true
+    },
+    tap: function(ev, ctx) {
+      console.log('single tap')
+    },
+    mycustomtap: function(ev, ctx) {
+      console.log('double tap')
     }
   }
 })
@@ -52,9 +91,13 @@ The handler will receive two arguments, similar to reactive's built-in `on-click
 - `ev`: event data
 - `ctx`: reactive instance
 
-### Option attributes
+### Options
 
-Each element with one or more touch bindings, gets his own [set of recognizers](https://hammerjs.github.io/getting-started.html#more-control). A recognizer can be configured with attributes in the form of `[recognizer]-[option]="value"`. Values will be interpolated if wrapped in brackets, and cast to integers, floats or booleans if necessary. Examples:
+Each element with one or more touch bindings, gets his own [set of recognizers](https://hammerjs.github.io/getting-started.html#more-control). Recognizers can be configured per-view and per-element.
+
+#### Per-element: option attributes
+
+Add attributes in the form of `[recognizer]-[option]="value"`. Values will be interpolated if wrapped in brackets, and cast to integers, floats or booleans if necessary. Examples:
 
 ```html
 <div on-pan pan-direction="horizontal"></div>
@@ -66,7 +109,17 @@ Each element with one or more touch bindings, gets his own [set of recognizers](
 <div on-press press-enable="{ someMethod }"></div>
 ```
 
-### TODO: custom events
+#### TODO: Per-view 
+
+```js
+touch(bindings, {
+  swipe: {
+    distance: 100
+  }
+})
+```
+
+### TODO: Custom events
 
 ```html
 <div on-tap on-doubletap></div>
@@ -87,7 +140,9 @@ touch(bindings, {
 
 ### List of events and options
 
-Every recognizer has the `enable` and `setup` options.
+#### Common options
+
+Every recognizer has these options.
 
 **enable**: if `false`, no events will be emitted. Defaults to `true`.
 
@@ -98,6 +153,8 @@ Every recognizer has the `enable` and `setup` options.
 - `ctx`: Reactive instance
 
 See [todo: link to example] for an example implementation of a tap combined with a double tap.
+
+#### Specifics
 
 For **direction**, use a numerical value (from `Hammer.DIRECTION_*` constants) or a shorthand like `all`, `horizontal`, `left`, etc.
 
