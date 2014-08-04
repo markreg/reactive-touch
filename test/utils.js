@@ -3,9 +3,9 @@ var reactive = require('reactive')
 
 exports.createView = function(tpl, delegate, model) {
   var view = reactive(tpl || '', model || {}, {
-    delegate: delegate || {}
+    delegate: delegate || {},
+    bindings: touch()
   })
 
-  view.use(touch)
   return view
 }

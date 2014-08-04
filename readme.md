@@ -1,6 +1,6 @@
 # reactive-touch
 
-Touch bindings for [reactive](https://github.com/component/reactive) with [Hammer](https://hammerjs.github.io/). Use on-swipe, on-tap, on-rotate and many more in your reactive views.
+Configurable touch bindings for [reactive](https://github.com/component/reactive) with [Hammer](https://hammerjs.github.io/). Use on-swipe, on-tap, on-rotate and many more in your reactive views.
 
 > Jump to: [Example](#example) - [Usage](#usage) - [Install](#install) - [Test](#test) - [License](#license)
 
@@ -10,63 +10,87 @@ See [Hammer browser support](https://hammerjs.github.io/browser-support.html) an
 
 ## Example
 
-The function signature is the same as reactive's built-in `on-click`.
+```html
+<div on-swipeleft="slide" swipe-distance="50" swipe-enable="{active}">
+Swipe here
+</div>
+```
 
 ```js
 var reactive = require('reactive')
   , touch = require('reactive-touch')
 
-var template = 
-  '<div on-swipeleft="swipe">Touch this</div>'
-
-var view  = reactive(template, {}, {
+var model = { active: false }
+var view  = reactive(template, model, {
+  bindings: touch(),
   delegate: {
-    swipe: function(ev, ctx) {
+    slide: function(ev, ctx) {
       console.log('you swiped left')
+      console.log(ev.distance > 50) // true
     }
   }
 })
 
-view.use(touch)
+view.set('active', true)
 ```
 
 ## Usage
 
-To use this plugin in your view:
+`touch([bindings])` extends your bindings object or if none given, creates a new bindings object. 
 
-```js
-var touch = require('reactive-touch')
-var view  = reactive(template, model)
+>**Breaking change:** before 1.0.0, the plugin was loaded with `view.use(touch)`. This created problems with reactive's `each` binding and scope, because a reactive instance renders immediately (before `use()`). See (TODO: link to issue)
 
-view.use(touch)
+Your view can react to any Hammer event by adding element attributes in the form of `on-[event]="handler name"`. If no handler name is given, it is assumed to be the event name. These are the same:
+
+```html
+<div on-pan></div>
+<div on-pan="pan"></div>
 ```
 
-The view can then react to any Hammer event. Prefix the event with "on-" to get the binding name. Follow the links below for a full list of events.
+The handler will receive two arguments, similar to reactive's built-in `on-click`:
 
-- [on-swipe](https://hammerjs.github.io/recognizer-swipe.html), on-swipeleft, etc
-- [on-pan](https://hammerjs.github.io/recognizer-pan.html), ..
-- [on-pinch](https://hammerjs.github.io/recognizer-pinch.html), ..
-- [on-press](https://hammerjs.github.io/recognizer-press.html)
-- [on-rotate](https://hammerjs.github.io/recognizer-rotate.html), ..
-- [on-tap](https://hammerjs.github.io/recognizer-tap.html)
+- `ev`: event data
+- `ctx`: reactive instance
 
-### Configuration
+### Option attributes
 
-Each element with one or more touch bindings, gets his own [set of recognizers](https://hammerjs.github.io/getting-started.html#more-control), encapsulated in a manager. These recognizers can be configured by adding a `touch-setup` attribute with a method name. The method will be called once for each element+recognizer pair. *Note: this API might change, once reactive supports method arguments or something similar.*
+Each element with one or more touch bindings, gets his own [set of recognizers](https://hammerjs.github.io/getting-started.html#more-control). A recognizer can be configured with attributes in the form of `[recognizer]-[option]="value"`. Values will be interpolated if wrapped in brackets, and cast to integers, floats or booleans if necessary. Examples:
 
-```js
-var template = 
-  '<img on-swipedown="swipe" touch-setup="configure">'
-
-var handlers = {
-  swipe: ..
-  configure: function(element, Swipe, ctx) {
-    // Set the minimal distance required 
-    // before recognizing a swipe.
-    Swipe.set({distance: 50})
-  }
-}
+```html
+<div on-pan pan-direction="horizontal"></div>
+<div on-rotateend="rotate" rotate-threshold="{ modelProperty + 10 }"></div>
+<div on-swipe swipe-velocity="0.65" swipe-direction="24"></div>
+<div on-tap tap-taps="2">double tap</div>
+<div on-tap tap-setup="specialTap"></div>
+<div on-press press-enable="{ someMethod }"></div>
 ```
+
+### List of events and options
+
+Every recognizer has the `enable` and `setup` options.
+
+**enable**: if `false`, no events will be emitted. Defaults to `true`.
+
+**setup**: a view method name, called after recognizer is created and options are set. For advanced usage (i.e., if you need `recognizeWith` or `requireFailure`). Receives three arguments:
+
+- `el`
+- `recognizer`: Hammer Recognizer instance
+- `ctx`: Reactive instance
+
+See [todo: link to example] for an example implementation of a tap combined with a double tap.
+
+For **direction**, use a numerical value (from `Hammer.DIRECTION_*` constants) or a shorthand like `all`, `horizontal`, `left`, etc.
+
+Please follow the links below for a description of the other options and the events.
+
+| Recognizer | Events   | Options  
+|:-----------|:---------|:------------------
+| [Swipe](https://hammerjs.github.io/recognizer-swipe/) | swipe, swipeleft, swiperight, swipeup, swipedown | distance, pointers, direction, velocity
+| [Pan](https://hammerjs.github.io/recognizer-pan/) | pan, panstart, panmove, panend, pancancel, panleft, panright, panup, pandown | pointers, threshold, direction
+| [Pinch](https://hammerjs.github.io/recognizer-pinch/) | pinch, pinchstart, pinchmove, pinchend, pinchcancel, pinchin, pinchout | pointers, threshold
+| [Rotate](https://hammerjs.github.io/recognizer-rotate/) | rotate, rotatestart, rotatemove, rotateend, rotatecancel | pointers, threshold
+| [Tap](https://hammerjs.github.io/recognizer-tap/) | tap | pointers, taps, interval, time, threshold, posThreshold
+| [Press](https://hammerjs.github.io/recognizer-press/) | press | pointers, threshold, time
 
 ## Install
 
