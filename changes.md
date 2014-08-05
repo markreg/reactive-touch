@@ -4,8 +4,11 @@
 
 New features
 
-- Option attributes
+- Per-view and per-element options
+- Reactive enabling of events
 - Default handler name is event name
+- `with` and `requireFailure` options
+- Custom recognizers
 
 Breaking changes
 
