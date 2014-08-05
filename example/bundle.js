@@ -2,10 +2,6 @@
 var reactive = require('reactive')
   , touch = require('../')
 
-// Monkey patch a Hammer bug. See: 
-// https://github.com/hammerjs/hammer.js/pull/637
-patchHammer()
-
 // Define mycustomtap recognizer
 var opts = {
   tap: { requireFailure: 'mycustomtap' },
@@ -16,9 +12,8 @@ var opts = {
 }
 
 var model = { active: false, distance: 0 }
-var template = document.getElementById('template').innerHTML
 
-var view  = reactive(template, model, {
+var view  = reactive(template(), model, {
   bindings: touch(null, opts),
   delegate: {
     toggle: function(ev, ctx) {
@@ -37,6 +32,16 @@ var view  = reactive(template, model, {
 })
 
 document.getElementById('container').appendChild(view.el)
+
+function template() {
+  var template = "<p>\r\n  <button on-tap=\"toggle\">{active ? 'Deactivate' : 'Activate'}</button>\r\n  <button data-visible=\"active\" on-tap=\"tapBtn\" on-mycustomtap=\"doubletapBtn\">\r\n    Tap or doubletap me\r\n  </button>\r\n</p>\r\n<p>Tapped: {tapped || 'none'}. Swiped: {distance || '0'}px</p>\r\n<div class=\"area {active && 'active'}\" \r\n  on-swipeleft swipe-threshold=\"150\" swipe-enable=\"{active}\">\r\n  <p>{ active ? 'Swipe > 150px left' : 'Disabled' }</p>\r\n</div>"
+
+  // Monkey patch a Hammer bug. See: 
+  // https://github.com/hammerjs/hammer.js/pull/637
+  patchHammer()
+
+  return template
+}
 
 function patchHammer() {
   var proto = require('hammerjs').Swipe.prototype

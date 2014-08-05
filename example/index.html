@@ -13,23 +13,10 @@
 <body>
   <h1>reactive-touch example</h1>
   <div id="container"></div>
-  <script id="template" type="text/html">
-    <p>
-      <button on-tap="toggle">{active ? 'Deactivate' : 'Activate'}</button>
-      <button data-visible="active" on-tap="tapBtn" on-mycustomtap="doubletapBtn">
-        Tap or doubletap me
-      </button>
-    </p>
-    <p>Tapped: {tapped || 'none'}. Swiped: {distance || '0'}px</p>
-    <div class="area {active && 'active'}" 
-      on-swipeleft swipe-threshold="150" swipe-enable="{active}">
-      <p>{ active ? 'Swipe > 150px left' : 'Disabled' }</p>
-    </div>
-  </script>
   <script type="text/javascript" src="bundle.js"></script>
   <h2>Template</h2>
-  <script src="http://gist-it.appspot.com/github/vweevers/reactive-touch/blob/master/example/index.html?slice=16:26"></script>
+  <script src="http://gist-it.appspot.com/github/vweevers/reactive-touch/blob/master/example/template.html"></script>
   <h2>Javascript</h2>
-  <script src="http://gist-it.appspot.com/github/vweevers/reactive-touch/blob/master/example/example.js?slice=8:38"></script>
+  <script src="http://gist-it.appspot.com/github/vweevers/reactive-touch/blob/master/example/example.js"></script>
 </body>
 </html>

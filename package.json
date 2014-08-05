@@ -6,7 +6,7 @@
   "scripts": {
     "test-local": "zuul --local 8080 -- test/index.js",
     "test": "zuul -- test/index.js",
-    "build-example": "browserify example/example.js > example/bundle.js"
+    "build-example": "browserify -t brfs example/example.js > example/bundle.js"
   },
   "repository": {
     "type": "git",
@@ -30,6 +30,7 @@
     "reactive": "^1.2.0"
   },
   "devDependencies": {
+    "brfs": "^1.2.0",
     "reactive": "^1.2.0",
     "tape": "^2.13.3",
     "zuul": "^1.9.0"
