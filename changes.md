@@ -12,10 +12,5 @@ New features
 
 Breaking changes
 
-- `touch()` wraps bindings, instead of `view.use(touch)`
+- `touch()` wraps bindings. Before 1.0.0, the plugin was loaded with `view.use(touch)`. This created problems with reactive's `each` binding and scope, because a reactive instance renders immediately ([reactive#126](https://github.com/component/reactive/issues/126))
 - `touch-setup` replaced by `[recognizer]-setup`
-
-Internal
-
-- `el.touchBinding` (metadata object) replaced by `el.hammer` (Hammer Manager)
-- Merged code to a single `getManager` function
