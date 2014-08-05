@@ -27,14 +27,13 @@ var view = reactive(tpl, null, {
 
 ## Example
 
-This example shows off per-view and per-element recognizer options, reactive enabling of events, default handler names and a custom Tap recognizer.
-
 [ TODO: requirebin link ]
 
 *template.html*
 ```html
-<div on-swipeleft swipe-distance="50" swipe-enable="{active}" on-tap="activate">
-  <p>{active ? 'Swipe left' : 'Tap to activate'}</p>
+<div on-swipeleft swipe-threshold="50" swipe-enable="{active}" on-tap="activate">
+  <p>{active ? 'Swipe > 50px left' : 'Tap to activate'}</p>
+  <p data-visible="active">You swiped {distance}px</p>
   <button data-visible="active" on-tap="tapBtn" on-mycustomtap="doubletapBtn">
     {tapped || 'Tap or doubletap me'}
   </button>
@@ -47,25 +46,24 @@ var reactive = require('reactive')
   , touch = require('reactive-touch')
   , template = require('template.html')
 
-var defaults = {
-  swipe: { distance: 10 },
-  tap:   { requireFailure: 'mycustomtap' },
+var opts = {
+  tap: { requireFailure: 'mycustomtap' },
   mycustomtap: {
     taps: 2,
     recognizeWith: 'tap'
   }
 }
 
-var model = { active: false }
+var model = { active: false, distance: 0 }
 
 var view  = reactive(template, model, {
-  bindings: touch(null, defaults),
+  bindings: touch(null, opts),
   delegate: {
     activate: function(ev, ctx) {
       ctx.set('active', true)
     },
     swipeleft: function(ev, ctx) {
-      console.log(ev.distance > 50) // true
+      ctx.set('distance', ev.distance)
     },
     tapBtn: function(ev, ctx) {
       ctx.set('tapped', 'single')
@@ -118,7 +116,7 @@ Add attributes in the form of `[recognizer]-[option]="value"`. Values will be in
 ```js
 touch(bindings, {
   swipe: {
-    distance: 100
+    threshold: 100
   }
 })
 ```
@@ -166,7 +164,7 @@ Please follow the links below for a description of the other options and the eve
 
 | Recognizer | Events   | Options  
 |:-----------|:---------|:------------------
-| [Swipe](https://hammerjs.github.io/recognizer-swipe/) | swipe, swipeleft, swiperight, swipeup, swipedown | distance, pointers, direction, velocity
+| [Swipe](https://hammerjs.github.io/recognizer-swipe/) | swipe, swipeleft, swiperight, swipeup, swipedown | threshold, pointers, direction, velocity
 | [Pan](https://hammerjs.github.io/recognizer-pan/) | pan, panstart, panmove, panend, pancancel, panleft, panright, panup, pandown | pointers, threshold, direction
 | [Pinch](https://hammerjs.github.io/recognizer-pinch/) | pinch, pinchstart, pinchmove, pinchend, pinchcancel, pinchin, pinchout | pointers, threshold
 | [Rotate](https://hammerjs.github.io/recognizer-rotate/) | rotate, rotatestart, rotatemove, rotateend, rotatecancel | pointers, threshold

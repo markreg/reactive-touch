@@ -25,9 +25,10 @@ var eventSuffixes =
 var optionParsers = 
   { velocity: parseFloat
   , enable: function(val) {
-      return val=='false' ? false : !!val
+      return val=='false' || val=='undefined' ? false : !!val
     }
   , direction: function(val) {
+      if (typeof val == 'number') return val
       var constant = Hammer['DIRECTION_' + val.toUpperCase()]
       return constant != null ? constant : parseInt(val)
     }
@@ -48,8 +49,11 @@ module.exports = function (bindings, opts) {
   for(var name in opts) {
     var o = opts[name]
     if (!o.recognizer) o.recognizer = guessRecognizer(name)
+    if (o.direction) o.direction = optionParsers.direction(o.direction)
     bind(bindings, name, o)
   }
+
+  return bindings
 }
 
 function bind(bindings, name, opts) {
@@ -77,7 +81,7 @@ function bind(bindings, name, opts) {
 
 function getManager(el, name, opts, reactive) {
   var manager = el.hammer
-  
+
   // Create Manager
   if (manager == null) {
     manager = el.hammer = new Hammer.Manager(el)
@@ -90,6 +94,7 @@ function getManager(el, name, opts, reactive) {
 
   // Create Recognizer
   if (manager[name] == null) {
+    opts.event = name
     var recog = new Hammer[opts.recognizer](opts)
     manager[name] = recog
     manager.add(recog)
@@ -107,13 +112,15 @@ function getManager(el, name, opts, reactive) {
           reactive.sub(prop, update)
         })
 
-        // Set or update
-        (function update() {
+        // Initial
+        update()
+
+        function update() {
           var raw = utils.interpolate(expr, function (prop, fn) {
             return fn ? fn(reactive) : reactive.get(prop)
           })
           setOption(recog, option, raw)
-        })()
+        }
       } else {
         // expr is value
         setOption(recog, option, expr)
@@ -122,8 +129,9 @@ function getManager(el, name, opts, reactive) {
 
     // Get per-element or per-view option
     function option(attr, optKey, cb) {
-      var val = el.getAttribute(name+'-'+attr) || opts[optKey || attr]
-      if (val != null) (cb || optKey)(val)
+      if (!cb) { cb = optKey; optKey = attr }
+      var val = el.getAttribute(name+'-'+attr) || opts[optKey]
+      if (val != null) cb(val)
     }
 
     // Dependencies between recognizers
@@ -178,7 +186,7 @@ function getRecognizer(manager, name, cb) {
 }
 
 function callMethod(view, method, args) {
-  var fn = view[method]
+  var fn = typeof method=='function' ? method : view[method]
   if (!fn) throw new Error('method .' + method + '() missing')
   return fn.apply(view, args)
 }
