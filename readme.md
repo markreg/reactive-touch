@@ -27,7 +27,7 @@ var view = reactive(tpl, null, {
 
 ## Live example
 
-See the [live example](http://todo)! It demonstrates most features:
+See the [live example](http://htmlpreview.github.io/?https://github.com/vweevers/reactive-touch/blob/master/example/index.html)! It demonstrates most features:
 
 - Custom recognizers
 - Reactive enabling of events
