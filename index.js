@@ -128,31 +128,26 @@ function getManager(el, name, opts, reactive) {
     })
 
     // Get per-element or per-view option
-    function option(attr, optKey, cb) {
-      if (!cb) { cb = optKey; optKey = attr }
-      var val = el.getAttribute(name+'-'+attr) || opts[optKey]
-      if (val != null) cb(val)
+    function option(key) {
+      return el.getAttribute(name+'-'+key) || opts[key]
     }
 
     // Dependencies between recognizers
-    option('with', 'recognizeWith', function(rwith){
-      getRecognizer(manager, rwith, function(other){
-        recog.recognizeWith(other)
-      })
+    var rw = option('with')
+    rw && getRecognizer(manager, rw, function(other){
+      recog.recognizeWith(other)
     })
 
-    option('require-failure', 'requireFailure', function(req){
-      getRecognizer(manager, req, function(other){
-        recog.requireFailure(other)
-      })
+    var rf = option('requireFailure')
+    rf && getRecognizer(manager, rf, function(other){
+      recog.requireFailure(other)
     })
 
     // Advanced configuration
-    option('setup', function(setup){
-      callMethod(reactive.view, setup, [el, recog, reactive])
-    })
+    var setup = option('setup')
+    setup && callMethod(reactive.view, setup, [el, recog, reactive])
 
-    // Call "listeners"
+    // Callback dependant recognizers
     if (manager.onCreated[name]) {
       var queue = manager.onCreated[name]
       delete manager.onCreated[name]

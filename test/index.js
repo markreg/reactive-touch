@@ -51,7 +51,7 @@ test('option attributes', function(t){
   var tpl = '<div on-swipe on-tap '+
     'swipe-threshold="50" swipe-velocity="0.96" '+
     'swipe-direction="left" swipe-with="tap"'+
-    ' tap-require-failure="swipe"></div>'
+    ' tap-requireFailure="swipe"></div>'
   
   var view = createView(tpl)
     , swipe = view.el.hammer.swipe
@@ -75,7 +75,7 @@ test('view options', function(t){
       threshold: 40,
       velocity: 0.38,
       direction: 'all',
-      recognizeWith: 'tap'
+      with: 'tap'
     },
     tap: {
       requireFailure: 'swipe'

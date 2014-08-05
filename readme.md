@@ -50,7 +50,7 @@ var opts = {
   tap: { requireFailure: 'mycustomtap' },
   mycustomtap: {
     taps: 2,
-    recognizeWith: 'tap'
+    with: 'tap'
   }
 }
 
@@ -121,7 +121,7 @@ touch(bindings, {
 })
 ```
 
-### Custom events
+### Custom recognizers
 
 ```html
 <div on-tap on-doubletap></div>
@@ -135,7 +135,7 @@ touch(bindings, {
   doubletap: {
     recognizer: 'Tap', // auto?
     taps: 2,
-    recognizeWith: 'tap'
+    with: 'tap'
   }
 })
 ```
@@ -147,6 +147,10 @@ touch(bindings, {
 Every recognizer has these options.
 
 **enable**: if `false`, no events will be emitted. Defaults to `true`.
+
+**with**: a lowercase recognizer name (e.g. `tap` or `mycustomtap`) to recognize simultaneously. Shortcut for [recognizeWith()](http://hammerjs.github.io/recognize-with/).
+
+**requireFailure**: a lowercase recognizer name that is required to fail before recognizing. Shortcut for [requireFailure()](http://hammerjs.github.io/require-failure/).
 
 **setup**: a view method name, called after recognizer is created and options are set. For advanced usage. Receives three arguments:
 
