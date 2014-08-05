@@ -36,7 +36,7 @@ var view  = reactive(template, model, {
   }
 })
 
-document.body.appendChild(view.el)
+document.getElementById('container').appendChild(view.el)
 
 function patchHammer() {
   var proto = require('hammerjs').Swipe.prototype
