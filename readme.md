@@ -25,7 +25,7 @@ var view = reactive(tpl, null, {
 })
 ```
 
-## Example
+## Live example
 
 See the [live example](http://todo)! It demonstrates most features:
 
@@ -38,7 +38,7 @@ See the [live example](http://todo)! It demonstrates most features:
 
 `touch([bindings][, options])` extends your bindings object or if none given, creates a new bindings object. Both arguments are optional, see below for `options`.
 
->**Breaking change:** before 1.0.0, the plugin was loaded with `view.use(touch)`. This created problems with reactive's `each` binding and scope, because a reactive instance renders immediately (before `use()`). See (TODO: link to issue)
+>**Breaking change:** before 1.0.0, the plugin was loaded with `view.use(touch)`. This created problems with reactive's `each` binding and scope, because a reactive instance renders immediately ([reactive#126](https://github.com/component/reactive/issues/126))
 
 Your view can react to any Hammer event by adding element attributes in the form of `on-[event]="handler name"`. If no handler name is given, it is assumed to be the event name. These are the same:
 
