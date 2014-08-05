@@ -1,6 +1,6 @@
 var Hammer  = require('hammerjs')
   , utils   = require('reactive/lib/utils')
-  , xtend   = require('xtend')
+  // , extend  = require('extend')
 
 var recognizers = ['Pan', 'Pinch', 'Press', 'Rotate', 'Swipe', 'Tap']
   , defaults = {}
@@ -44,13 +44,30 @@ module.exports = function (bindings, opts) {
   }
 
   bindings || (bindings = {})
-  opts = opts ? xtend(defaults, opts) : xtend(defaults)
 
-  for(var name in opts) {
-    var o = opts[name]
-    if (!o.recognizer) o.recognizer = guessRecognizer(name)
-    if (o.direction) o.direction = optionParsers.direction(o.direction)
-    bind(bindings, name, o)
+  var merged = {}, name, opt
+
+  for(name in defaults) {
+    merged[name] = {}
+    for(opt in defaults[name])
+      merged[name][opt] = defaults[name][opt]
+  }
+
+  if (opts) {
+    for(name in opts) {
+      merged[name] || (merged[name] = {})
+      for(opt in opts[name])
+        merged[name][opt] = opts[name][opt]
+    }
+  }
+
+  for(var name in merged) {
+    var group = merged[name]
+    if (!group.recognizer)
+      group.recognizer = guessRecognizer(name)
+    if (group.direction)
+      group.direction = optionParsers.direction(group.direction)
+    bind(bindings, name, group)
   }
 
   return bindings
@@ -140,6 +157,12 @@ function getManager(el, name, opts, reactive) {
 
     var rf = option('requireFailure')
     rf && getRecognizer(manager, rf, function(other){
+      
+      // must change order for 
+      // requireFailure to work
+      manager.add(other)
+      manager.add(recog)
+
       recog.requireFailure(other)
     })
 

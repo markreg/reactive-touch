@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>reactive-touch example</title>
+  <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+  <style type="text/css">
+   .hidden { display: none }
+   div { border: 1px solid red; text-align: center }
+   div.active { border-color: green }
+  </style>
+</head>
+<body>
+  <script id="template" type="text/html">
+    <p>
+      <button on-tap="toggle">{active ? 'Deactivate' : 'Activate'}</button>
+      <button data-visible="active" on-tap="tapBtn" on-mycustomtap="doubletapBtn">
+        Tap or doubletap me
+      </button>
+    </p>
+    <p>Tapped: {tapped || 'none'}. Swiped: {distance || '0'}px</p>
+    <div class="{active && 'active'}" 
+      on-swipeleft swipe-threshold="150" swipe-enable="{active}">
+      <p>{ active ? 'Swipe > 150px left' : 'Disabled' }</p>
+    </div>
+  </script>
+  <script type="text/javascript" src="bundle.js"></script>
+</body>
+</html>

@@ -2,7 +2,7 @@
 
 Configurable touch bindings for [reactive](https://github.com/component/reactive) with [Hammer](https://hammerjs.github.io/). Use `on-swipe`, `on-tap`, `on-rotate` and many more in your reactive views. Also supports bindings for custom events, like `on-doubletap`.
 
-> Jump to: [Quickstart](#quickstart) - [Example](#example) - [Usage](#usage) - [Install](#install) - [Test](#test) - [License](#license)
+> Jump to: [Quickstart](#quickstart) - [Live example](#live-example) - [Usage](#usage) - [Install](#install) - [Test](#test) - [License](#license)
 
 [![Build Status](https://saucelabs.com/browser-matrix/reactive-touch-sauce.svg)](https://travis-ci.org/vweevers/reactive-touch)
 
@@ -14,11 +14,11 @@ See [Hammer browser support](https://hammerjs.github.io/browser-support.html) an
 var reactive = require('reactive')
   , touch = require('reactive-touch')
 
-var tpl  = '<div on-swipeleft>Swipe left</div>'
+var tpl  = '<div on-swipeleft="swipe">Swipe left</div>'
 var view = reactive(tpl, null, {
   bindings: touch(),
   delegate: {
-    swipeleft: function(ev, ctx) {
+    swipe: function(ev, ctx) {
       console.log('you swiped left')
     }
   }
@@ -27,53 +27,12 @@ var view = reactive(tpl, null, {
 
 ## Example
 
-[ TODO: requirebin link ]
+See the [live example](http://todo)! It demonstrates most features:
 
-*template.html*
-```html
-<div on-swipeleft swipe-threshold="50" swipe-enable="{active}" on-tap="activate">
-  <p>{active ? 'Swipe > 50px left' : 'Tap to activate'}</p>
-  <p data-visible="active">You swiped {distance}px</p>
-  <button data-visible="active" on-tap="tapBtn" on-mycustomtap="doubletapBtn">
-    {tapped || 'Tap or doubletap me'}
-  </button>
-</div>
-```
-
-*example.js*
-```js
-var reactive = require('reactive')
-  , touch = require('reactive-touch')
-  , template = require('template.html')
-
-var opts = {
-  tap: { requireFailure: 'mycustomtap' },
-  mycustomtap: {
-    taps: 2,
-    with: 'tap'
-  }
-}
-
-var model = { active: false, distance: 0 }
-
-var view  = reactive(template, model, {
-  bindings: touch(null, opts),
-  delegate: {
-    activate: function(ev, ctx) {
-      ctx.set('active', true)
-    },
-    swipeleft: function(ev, ctx) {
-      ctx.set('distance', ev.distance)
-    },
-    tapBtn: function(ev, ctx) {
-      ctx.set('tapped', 'single')
-    },
-    doubletapBtn: function(ev, ctx) {
-      ctx.set('tapped', 'double')
-    }
-  }
-})
-```
+- Custom recognizers
+- Reactive enabling of events
+- Per-element and per-view options
+- Default handler names
 
 ## Usage
 

@@ -64,6 +64,11 @@ test('option attributes', function(t){
   t.equal(swipe.simultaneous[tap.id], tap, 'recognizeWith')
   t.deepEqual(tap.requireFail, [swipe], 'require fail')
 
+  tpl = '<div on-swipeleft swipe-threshold="350"></div>'
+  view = createView(tpl)
+  options = view.el.hammer.swipe.options
+  t.equal(options.threshold, 350, 'uses recognizer name')
+
   t.end()
 })
 
@@ -97,7 +102,7 @@ test('view options', function(t){
 })
 
 test('custom event', function(t){
-  t.plan(3)
+  t.plan(4)
 
   var tpl = '<div on-doubletap doubletap-pointers="3"></div>'
 
@@ -113,7 +118,8 @@ test('custom event', function(t){
 
   var dbl = view.el.hammer.doubletap
   t.ok(dbl instanceof Hammer.Tap, 'is a Tap recognizer')
-  t.equal(dbl.options.pointers, 3, 'sets options')
+  t.equal(dbl.options.pointers, 3, 'pointer option')
+  t.equal(dbl.options.taps, 2, 'taps option')
 
   emit(view, 'doubletap')
 })
