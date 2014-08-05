@@ -113,6 +113,8 @@ Add attributes in the form of `[recognizer]-[option]="value"`. Values will be in
 
 #### Per-view 
 
+Group options by lowercase recognizer name:
+
 ```js
 touch(bindings, {
   swipe: {
@@ -122,6 +124,8 @@ touch(bindings, {
 ```
 
 ### Custom recognizers
+
+Simply add a group to `options`, like "doubletap" below. Optionally set `recognizer`, required if the custom recognizer's name doesn't contain a standard name. In the example, `recognizer` could have been left out.
 
 ```html
 <div on-tap on-doubletap></div>
@@ -133,7 +137,7 @@ touch(bindings, {
     requireFailure: 'doubletap'
   },
   doubletap: {
-    recognizer: 'Tap', // auto?
+    recognizer: 'Tap',
     taps: 2,
     with: 'tap'
   }
@@ -144,21 +148,12 @@ touch(bindings, {
 
 #### Common options
 
-Every recognizer has these options.
-
-**enable**: if `false`, no events will be emitted. Defaults to `true`.
-
-**with**: a lowercase recognizer name (e.g. `tap` or `mycustomtap`) to recognize simultaneously. Shortcut for [recognizeWith()](http://hammerjs.github.io/recognize-with/).
-
-**requireFailure**: a lowercase recognizer name that is required to fail before recognizing. Shortcut for [requireFailure()](http://hammerjs.github.io/require-failure/).
-
-**setup**: a view method name, called after recognizer is created and options are set. For advanced usage. Receives three arguments:
-
-- `el`
-- `recognizer`: Hammer Recognizer instance
-- `ctx`: Reactive instance
-
-See [todo: link to example] for an example implementation of a tap combined with a double tap.
+| Option           | Description
+|:-----------------|:--------------
+| *enable*         | If `false`, no events will be emitted. Defaults to `true`.
+| *with*           | A lowercase recognizer name (e.g. `tap` or `mycustomtap`) to recognize simultaneously. Shortcut for [recognizeWith()](http://hammerjs.github.io/recognize-with/).
+| *requireFailure* | A lowercase recognizer name that is required to fail before recognizing. Shortcut for [requireFailure()](http://hammerjs.github.io/require-failure/).
+| *setup*          | A view method name, called after recognizer is created and options are set. For advanced usage. Receives three arguments: `el`, `recognizer` and `ctx`.
 
 #### Specifics
 
