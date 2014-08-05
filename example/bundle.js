@@ -92,7 +92,6 @@ module.exports = function (bindings, opts) {
   }
 
   bindings || (bindings = {})
-  // opts = extend(true, {}, defaults, opts)
 
   var merged = {}, name, opt
 
@@ -207,7 +206,8 @@ function getManager(el, name, opts, reactive) {
     var rf = option('requireFailure')
     rf && getRecognizer(manager, rf, function(other){
       
-      // change order
+      // must change order for 
+      // requireFailure to work
       manager.add(other)
       manager.add(recog)
 
