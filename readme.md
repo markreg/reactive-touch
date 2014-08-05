@@ -33,10 +33,9 @@ This example shows off per-view and per-element recognizer options, reactive ena
 
 *template.html*
 ```html
-<div on-swipeleft swipe-distance="50" swipe-enable="{active}">
-  <p>{active ? 'Swipe left' : 'Waiting..'}</p>
-  <button data-hidden="active" on-tap="activate">Activate swipe</button>
-  <button on-tap="tapBtn" on-mycustomtap="doubletapBtn">
+<div on-swipeleft swipe-distance="50" swipe-enable="{active}" on-tap="activate">
+  <p>{active ? 'Swipe left' : 'Tap to activate'}</p>
+  <button data-visible="active" on-tap="tapBtn" on-mycustomtap="doubletapBtn">
     {tapped || 'Tap or doubletap me'}
   </button>
 </div>
@@ -80,7 +79,7 @@ var view  = reactive(template, model, {
 
 ## Usage
 
-`touch([bindings])` extends your bindings object or if none given, creates a new bindings object. 
+`touch([bindings][, options])` extends your bindings object or if none given, creates a new bindings object. Both arguments are optional, see below for `options`.
 
 >**Breaking change:** before 1.0.0, the plugin was loaded with `view.use(touch)`. This created problems with reactive's `each` binding and scope, because a reactive instance renders immediately (before `use()`). See (TODO: link to issue)
 
@@ -110,11 +109,11 @@ Add attributes in the form of `[recognizer]-[option]="value"`. Values will be in
 <div on-swipe swipe-velocity="0.65" swipe-direction="24"></div>
 <div on-tap tap-taps="2">double tap</div>
 <div on-tap tap-setup="specialTap"></div>
-<div on-pinch on-rotate pinch-with="rotate">TODO</div>
+<div on-pinch on-rotate pinch-with="rotate"></div>
 <div on-press press-enable="{ someMethod }"></div>
 ```
 
-#### TODO: Per-view 
+#### Per-view 
 
 ```js
 touch(bindings, {
@@ -124,7 +123,7 @@ touch(bindings, {
 })
 ```
 
-### TODO: Custom events
+### Custom events
 
 ```html
 <div on-tap on-doubletap></div>
@@ -151,7 +150,7 @@ Every recognizer has these options.
 
 **enable**: if `false`, no events will be emitted. Defaults to `true`.
 
-**setup**: a view method name, called after recognizer is created and options are set. For advanced usage (i.e., if you need `recognizeWith` or `requireFailure`). Receives three arguments:
+**setup**: a view method name, called after recognizer is created and options are set. For advanced usage. Receives three arguments:
 
 - `el`
 - `recognizer`: Hammer Recognizer instance
