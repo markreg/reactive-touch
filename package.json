@@ -6,7 +6,7 @@
   "scripts": {
     "test-local": "zuul --local 8080 -- test/index.js",
     "test": "zuul -- test/index.js",
-    "build-example": "browserify -t brfs example/example.js > example/bundle.js"
+    "build-example": "browserify -t brfs example/index.js | uglifyjs -c > example/bundle.js"
   },
   "repository": {
     "type": "git",

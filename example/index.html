@@ -3,20 +3,29 @@
 <head>
   <title>reactive-touch example</title>
   <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/styles/monokai_sublime.min.css">
   <style type="text/css">
     body { font-family: Helvetica, Arial, sans-serif }
-   .hidden { display: none }
-   .area { border: 1px solid red; text-align: center }
+   .area {
+      border: 1px solid red;
+      text-align: center;
+      line-height: 100px;
+      height: 100px
+    }
    .area.active { border-color: green }
+   .row { clear: both }
+   .col { 
+      width: 500px; 
+      float: left; 
+      margin-right: 8px
+    }
   </style>
 </head>
 <body>
   <h1>reactive-touch example</h1>
-  <div id="container"></div>
+  <div class="row" id="example"></div>
+  <div class="row" id="sources"></div>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/highlight.min.js"></script>
   <script type="text/javascript" src="bundle.js"></script>
-  <h2>Template</h2>
-  <script src="http://gist-it.appspot.com/github/vweevers/reactive-touch/blob/master/example/template.html"></script>
-  <h2>Javascript</h2>
-  <script src="http://gist-it.appspot.com/github/vweevers/reactive-touch/blob/master/example/example.js"></script>
 </body>
 </html>

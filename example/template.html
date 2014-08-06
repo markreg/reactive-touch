@@ -1,11 +1,17 @@
-<p>
-  <button on-tap="toggle">{active ? 'Deactivate' : 'Activate'}</button>
-  <button data-visible="active" on-tap="tapBtn" on-mycustomtap="doubletapBtn">
+<div class="col area {active && 'active'}" 
+  on-swipeleft swipe-threshold="150" 
+  swipe-enable="{active}">
+  { active ? 'Swipe > 150px left' : 'Disabled' }
+</div>
+<div class="col">
+  <button on-tap="toggle">
+    {active ? 'Deactivate' : 'Activate'}
+  </button>
+  <button on-tap on-mycustomtap="tap">
     Tap or doubletap me
   </button>
-</p>
-<p>Tapped: {tapped || 'none'}. Swiped: {distance || '0'}px</p>
-<div class="area {active && 'active'}" 
-  on-swipeleft swipe-threshold="150" swipe-enable="{active}">
-  <p>{ active ? 'Swipe > 150px left' : 'Disabled' }</p>
+  <p>
+    Tapped: {tapped || 'none'}. 
+    Swiped: {distance || '0'}px
+  </p>
 </div>
