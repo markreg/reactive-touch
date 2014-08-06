@@ -1,6 +1,6 @@
 {
   "name": "reactive-touch",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Touch bindings for reactive-component with Hammer",
   "main": "index.js",
   "scripts": {
