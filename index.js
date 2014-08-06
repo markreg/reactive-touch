@@ -122,6 +122,13 @@ function getManager(el, name, opts, reactive) {
       if (expr == null) return
 
       if (utils.hasInterpolation(expr)) {
+        var update = function () {
+          var raw = utils.interpolate(expr, function (prop, fn) {
+            return fn ? fn(reactive) : reactive.get(prop)
+          })
+          setOption(recog, option, raw)
+        }
+
         // Subscribe
         var props = utils.interpolationProps(expr)
 
@@ -131,13 +138,6 @@ function getManager(el, name, opts, reactive) {
 
         // Initial
         update()
-
-        function update() {
-          var raw = utils.interpolate(expr, function (prop, fn) {
-            return fn ? fn(reactive) : reactive.get(prop)
-          })
-          setOption(recog, option, raw)
-        }
       } else {
         // expr is value
         setOption(recog, option, expr)
