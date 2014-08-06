@@ -124,6 +124,31 @@ test('custom event', function(t){
   emit(view, 'doubletap')
 })
 
+test('recognizer option', function(t){
+  t.plan(5)
+
+  function testView(opts) {
+    var tpl = '<div on-double></div>'
+    var view = createView(tpl, {
+      "double": function(ev, ctx) {
+        t.equal(ev.type, 'double', 'name lowercased')
+      }
+    }, null, opts)
+
+    t.ok(view.el.hammer.double instanceof Hammer.Tap, 'is a Tap recognizer')
+    emit(view, 'double')
+  }
+
+  testView({ Double: { recognizer: 'Tap', taps: 2 } })
+  testView({ "double": { recognizer: 'tap', taps: 2 } })
+
+  function noRecognizer() {
+    testView({ "double": { taps: 2 } })
+  }
+
+  t.throws(noRecognizer, Error, 'required')
+})
+
 test('reactive enable', function(t){
   var tpl = '<div on-tap tap-enable="{active}"></div>'
   var testvar = null

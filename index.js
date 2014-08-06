@@ -1,12 +1,11 @@
 var Hammer  = require('hammerjs')
   , utils   = require('reactive/lib/utils')
-  // , extend  = require('extend')
 
-var recognizers = ['Pan', 'Pinch', 'Press', 'Rotate', 'Swipe', 'Tap']
+var recognizers = ['pan', 'pinch', 'press', 'rotate', 'swipe', 'tap']
   , defaults = {}
 
 for (var i = recognizers.length - 1; i >= 0; i--) {
-  defaults[recognizers[i].toLowerCase()] = {
+  defaults[recognizers[i]] = {
     recognizer: recognizers[i],
     enable: true
   }
@@ -63,8 +62,9 @@ module.exports = function (bindings, opts) {
 
   for(var name in merged) {
     var group = merged[name]
-    if (!group.recognizer)
-      group.recognizer = guessRecognizer(name)
+    name = name.toLowerCase()
+    var rgn = group.recognizer || guessRecognizer(name)
+    group.recognizer = rgn[0].toUpperCase() + rgn.slice(1)
     if (group.direction)
       group.direction = optionParsers.direction(group.direction)
     bind(bindings, name, group)
@@ -183,10 +183,8 @@ function getManager(el, name, opts, reactive) {
 }
 
 function guessRecognizer(name) {
-  name = name.toLowerCase()
-
   for (var i = recognizers.length - 1; i >= 0; i--) {
-    if (name.indexOf(recognizers[i].toLowerCase())>=0)
+    if (name.indexOf(recognizers[i])>=0)
       return recognizers[i]
   }
 

@@ -93,7 +93,7 @@ touch(bindings, {
 
 ### Custom recognizers
 
-Simply add a group to `options` with a custom name. Optionally set `recognizer`, required if the name doesn't contain a standard name. In the following example, `recognizer` could have been left out.
+Simply add a group to `options` with a custom name. Optionally set `recognizer` - a lowercase recognizer name to extend. Required if the name doesn't contain a standard name. In the following example, `recognizer` could have been left out.
 
 ```html
 <div on-tap on-doubletap></div>
@@ -105,7 +105,7 @@ touch(bindings, {
     requireFailure: 'doubletap'
   },
   doubletap: {
-    recognizer: 'Tap',
+    recognizer: 'tap',
     taps: 2,
     with: 'tap'
   }
