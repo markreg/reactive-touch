@@ -1,5 +1,7 @@
 # reactive-touch
 
+[![NPM](https://badge.fury.io/js/reactive-touch.svg)](https://www.npmjs.org/package/reactive-touch) ![dependencies](https://david-dm.org/vweevers/reactive-touch.png)
+
 Configurable touch bindings for [reactive](https://github.com/component/reactive) with [Hammer](https://hammerjs.github.io/). Use `on-swipe`, `on-tap`, `on-rotate` and many more in your reactive views. Also supports bindings for custom recognizers, like `on-doubletap`.
 
 **Jump to**: [Quickstart](#quickstart) - [Live example](#live-example) - [Install](#install) - [Usage](#usage) - [Test](#test) - [License](#license)
